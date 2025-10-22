@@ -1,36 +1,40 @@
-NAME = minitalk
+# **************************************************************************** #
+# Makefile para minitalk
+# **************************************************************************** #
+
+NAME_S = server
+NAME_C = client
+
+LIBFT_DIR = libft
+LIBFT = $(LIBFT_DIR)/libft.a
+
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-SRCS_SERVER = server.c
-SRCS_CLIENT = client.c
-OBJS_SERVER = $(SRCS_SERVER:.c=.o)
-OBJS_CLIENT = $(SRCS_CLIENT:.c=.o)
+SRCS_S = server.c
+SRCS_C = client.c
 
-LIBFT_DIR = ../libft
-LIBFT = $(LIBFT_DIR)/libft.a
+OBJS_S = $(SRCS_S:.c=.o)
+OBJS_C = $(SRCS_C:.c=.o)
 
-INCLUDES = -I. -I$(LIBFT_DIR)
-
-all: $(LIBFT) server client
+all: $(LIBFT) $(NAME_S) $(NAME_C)
 
 $(LIBFT):
-	make -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR)
 
-server: $(OBJS_SERVER) minitalk.h $(LIBFT)
-	$(CC) $(CFLAGS) -o server $(OBJS_SERVER) $(LIBFT)
+$(NAME_S): $(SRCS_S) $(LIBFT)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -o $(NAME_S) $(SRCS_S) $(LIBFT)
 
-client: $(OBJS_CLIENT) minitalk.h $(LIBFT)
-	$(CC) $(CFLAGS) -o client $(OBJS_CLIENT) $(LIBFT)
-
-%.o: %.c minitalk.h
-	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
+$(NAME_C): $(SRCS_C) $(LIBFT)
+	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -o $(NAME_C) $(SRCS_C) $(LIBFT)
 
 clean:
-	rm -f $(OBJS_SERVER) $(OBJS_CLIENT)
+	$(MAKE) -C $(LIBFT_DIR) clean
+	rm -f $(OBJS_S) $(OBJS_C)
 
 fclean: clean
-	rm -f server client
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	rm -f $(NAME_S) $(NAME_C)
 
 re: fclean all
 
