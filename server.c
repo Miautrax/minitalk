@@ -14,7 +14,7 @@ static void	init_bits(unsigned char *c, int *bit, int *is_init)
 	}
 }
 
-static void	server_handler(int sig, siginfo_t *info, void *uap)
+static void	server_handler(int sig, siginfo_t *info, void *unused)
 {
 	static unsigned char	c;
 	static int				bit;
@@ -22,7 +22,7 @@ static void	server_handler(int sig, siginfo_t *info, void *uap)
 	pid_t					client_pid;
 
 	init_bits(&c, &bit, &is_init);
-	(void)uap;
+	(void)unused;
 	client_pid = 0;
 	if (info)
 		client_pid = info->si_pid;
